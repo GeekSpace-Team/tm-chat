@@ -1,0 +1,31 @@
+import { AxiosInstance } from "axios";
+import { Socket } from "socket.io-client";
+import { IChatOptions, IEvents, IMessage, UserInfo } from "./model/model";
+import { ChatRoom, GResponse, InitChatResponse, User } from "./model/response";
+declare class TmChat {
+    private readonly chat;
+    fetcher: AxiosInstance;
+    realtime: Socket;
+    socketId: string;
+    userId: string;
+    user: User;
+    chats: IMessage[];
+    room: ChatRoom;
+    rooms: any;
+    private events;
+    constructor(chat: IChatOptions);
+    connect(events: IEvents): Promise<void>;
+    private isExistMessage;
+    createEvents(events: IEvents): Promise<void>;
+    initChat(user: UserInfo): Promise<GResponse<InitChatResponse>>;
+    sendMessage(text: string, front_path: string, chat_room_uuid?: string): Promise<GResponse<IMessage>>;
+    sendImageMessage(image: File, front_path: string, chat_room_uuid?: string): Promise<GResponse<IMessage>>;
+    getChatRoomMessages(chat_room_uuid: string): Promise<IMessage[]>;
+    sendMessageToRoom(chat_room_uuid: string, text: string, front_path: string): Promise<GResponse<IMessage>>;
+    sendImageToRoom(chat_room_uuid: string, image: File, front_path: string): Promise<GResponse<IMessage>>;
+    getImageFullUrl(image: string): string;
+    leaveChatRoom(roomId: string): Promise<unknown>;
+    getChatRoomDetails(chatRoomUUID: string): Promise<unknown>;
+    inviteChatRoom(chatRoomUUID: string, userId: number): Promise<unknown>;
+}
+export default TmChat;
